@@ -4,12 +4,16 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./bl-connect/bl-connect.module').then( m => m.BlConnectPageModule)
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'connect',
     pathMatch: 'full'
+  },
+  {
+    path: 'connect',
+    loadChildren: () => import('./bl-connect/bl-connect.module').then( m => m.BlConnectPageModule)
   },
 ];
 
