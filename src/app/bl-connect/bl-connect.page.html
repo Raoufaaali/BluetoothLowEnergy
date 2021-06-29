@@ -1,19 +1,29 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Connect</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
 
-  <div class="center-button">
-    <ion-button color="dark">Scan</ion-button>
-  </div>
- 
+  <div style="padding: 10px;"></div>
 
-  <ion-item class="center-button">
-   
-  </ion-item>
-  
+  <div class="ion-padding"></div>
 
+    <ion-list padding style="padding: 20px;">
+      <ion-button color="dark"
+                  (click)="startScanning()">scan</ion-button>
+      <ion-list-header>
+          Paired Devices
+      </ion-list-header>
+      <ion-item *ngFor="let device of pairedDevices">
+          {{device.name}}
+      </ion-item>
+      <ion-button color="dark"
+                  (click)="disconnect()">Disconnect</ion-button>
+      <ion-list-header>
+          availlable Devices
+      </ion-list-header>
+      <ion-item *ngFor='let device of unpairedDevices'>
+          <span (click)="selectDevice(device.id)">
+              {{device.name || device.address}}
+          </span>
+      </ion-item>
+      <ion-spinner name="bubbles"
+                   *ngIf="gettingDevices"></ion-spinner>
+  </ion-list>
 </ion-content>
