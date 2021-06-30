@@ -11,11 +11,10 @@ import { AlertController } from '@ionic/angular';
 export class BlConnectPage {
 
 
- public unpairedDevices: any[];
+ public unpairedDevices: ScanStatus[];
  public pairedDevices: any;
  public gettingDevices: boolean;
  
-
   constructor(private ble: BluetoothLE, private alertController: AlertController, private androidPermissions: AndroidPermissions, private diagnostic: Diagnostic) { }
 
   public ionViewWillEnter()
@@ -33,13 +32,13 @@ export class BlConnectPage {
   {
     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then((data:any) => {
       if(data.hasPermission) {
-         console.log("have permission ACCESS_COARSE_LOCATION");
+        // console.log("have permission ACCESS_COARSE_LOCATION");
       }      
    });
 
    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then((data:any) => {
     if(data.hasPermission) {
-       console.log("have permission ACCESS_FINE_LOCATION");
+      // console.log("have permission ACCESS_FINE_LOCATION");
     }      
  });
     this.startScan();
@@ -55,7 +54,8 @@ export class BlConnectPage {
     this.unpairedDevices = [];  // clear list
     this.ble.startScan(scanPrams).subscribe( successScanStatus => {
      // debugger;
-      console.log("startScan: " + JSON.stringify(successScanStatus));
+     // console.log(JSON.stringify(successScanStatus));
+     console.log(successScanStatus);
       this.addUniqueDevicesToList(successScanStatus);
     }, (error) => {
       console.log("error: " + JSON.stringify(error));
@@ -73,11 +73,19 @@ export class BlConnectPage {
     this.presentAlert(scanStopedStatus.status);
   }
 
+  
   public addUniqueDevicesToList(scanStatus: ScanStatus)
   {
-    if (this.unpairedDevices.indexOf(scanStatus.address) === -1)
+   // debugger;
+    console.log(`scan status to check ${scanStatus}`);
+    // only add the device if it has an address and wasnt seen before
+   if ( scanStatus?.address && !this.unpairedDevices.some(e => e.address == scanStatus.address))
     {
+      console.log(`going to add address ${scanStatus.address}`);
       this.unpairedDevices.push(scanStatus);
+    }
+    else {
+      console.log(`address ${scanStatus.address} already exists`);
     }
   }
 
@@ -92,6 +100,7 @@ export class BlConnectPage {
     this.ble.connect(params).subscribe((deviceInfo) => {
       this.presentAlert(`Success! DeviceInfo.status = ${deviceInfo.status} !`);
       console.log(deviceInfo);
+      this.discover(deviceAddress);
     },
     (error) => {
       this.presentAlert('connection fail!');
@@ -100,6 +109,23 @@ export class BlConnectPage {
     
     );
 
+
+  }
+
+  public async discover(address: string)
+  {
+    let params = {
+      address: address,
+      clearCache: true
+    }
+
+    var device = await this.ble.discover(params);
+
+      if (device)
+      {
+        this.presentAlert(JSON.stringify(device));
+        console.log(JSON.stringify(device));
+      }
 
   }
 
