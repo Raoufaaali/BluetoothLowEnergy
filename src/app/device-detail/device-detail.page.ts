@@ -18,7 +18,7 @@ export class DeviceDetailPage {
 
   public vm: DeviceViewModel = {
     /* tslint:disable-next-line */
-    device: null,
+    device:  { address: '', status: null, services: null, name: '' } as Device,
     deviceInfo: ''
   };
   constructor(
@@ -36,27 +36,16 @@ export class DeviceDetailPage {
       let isConnected = await this.blService.isConnected(address);
       if (isConnected)
       {
+        console.log('device is connected');
         this.discover(address);
       }
       else 
       {
-        let deviceInfo = await this.blService.connectDevice(address);
-        console.log(JSON.stringify(deviceInfo));
+        this.connectDevice(address);
+        console.log('device is not connected. Attempting to connect....');
       }
       
     }   
-    /*
-    IF device connected
-      Discover
-    ELSE 
-    Connect
-
-
-
-
-
-    */
-
       
   }
 
@@ -64,7 +53,24 @@ export class DeviceDetailPage {
   {
     this.vm.device = await this.blService.discover(address);
     this.vm.deviceInfo = JSON.stringify(this.vm.device);
+    console.log(JSON.stringify(this.vm.device));
     console.log(this.vm.deviceInfo);
+  }
+
+  public connectDevice(address: string)
+  {
+
+    let deviceInfo = this.blService.connectDevice(address).subscribe((successDeviceInfo) => {
+
+      console.log('Connection Success!');
+      console.log(JSON.stringify(successDeviceInfo));
+      console.log('Discovering...');
+      this.discover(address);
+    }, 
+    (error) => {
+      console.log(JSON.stringify(error));
+    });
+
   }
 
 }

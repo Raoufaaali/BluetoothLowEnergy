@@ -18,15 +18,10 @@ export class BluetoothService {
     }
 
     let device: Device = await this.ble.discover(params);
-        if (device)
-      {
-        console.log(JSON.stringify(device));
-      }
       return device;
   }
 
   public async isConnected(address: string): Promise<boolean> {
-    debugger;
     let params = {
       address: address
     }
@@ -43,20 +38,8 @@ export class BluetoothService {
 
   public connectDevice(address: string): Observable<DeviceInfo>
   {
-    let deviceInfo;
     let params: ConnectionParams = {address: address};
-    this.ble.connect(params).subscribe((deviceInfo) => {
-      console.log(deviceInfo);
-      return deviceInfo;
-      
-    },
-    (error) => {
-      console.log(JSON.stringify(error));
-        }
-    );
-
-   return deviceInfo;
+    return this.ble.connect(params);
   }
-
 
 }

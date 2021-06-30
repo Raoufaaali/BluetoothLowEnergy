@@ -6,10 +6,10 @@
 
 <ion-content>
   <ion-card>
-    <img src="./assets/icon/aristocratlogo.png" />
+    <img src="./assets/aristocratlogo.png" />
     <ion-card-header>
-      <ion-card-subtitle>Destination</ion-card-subtitle>
-      <ion-card-title>Madison, WI</ion-card-title>
+      <ion-card-subtitle>{{vm.device.status}}</ion-card-subtitle>
+      <ion-card-title>{{vm.device.name || vm.device.address}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       Founded in 1829 on an isthmus between Lake Monona and Lake Mendota, Madison was named the capital of the Wisconsin Territory in 1836. <br><br>
