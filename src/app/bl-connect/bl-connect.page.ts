@@ -89,8 +89,9 @@ export class BlConnectPage {
   public connectDevice(deviceAddress: string)
   {
     let params: ConnectionParams = {address: deviceAddress};
-    this.ble.connect(params).subscribe((success) => {
-      this.presentAlert('connection success!');
+    this.ble.connect(params).subscribe((deviceInfo) => {
+      this.presentAlert(`Success! DeviceInfo.status = ${deviceInfo.status} !`);
+      console.log(deviceInfo);
     },
     (error) => {
       this.presentAlert('connection fail!');
