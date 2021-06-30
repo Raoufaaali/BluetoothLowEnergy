@@ -52,6 +52,7 @@ export class BlConnectPage {
 
     console.log('Scanning for Bluetooth LE Devices');
     this.unpairedDevices = [];  // clear list
+    this.gettingDevices = true;
     this.ble.startScan(scanPrams).subscribe( successScanStatus => {
      // debugger;
      // console.log(JSON.stringify(successScanStatus));
@@ -62,17 +63,17 @@ export class BlConnectPage {
     })
     setTimeout(() => {
       console.log('Stopping the scan');
-      this.disconnect()
+      this.stopScan()
 
     }, 2000, 'Scan complete');
   }
 
-  public async disconnect()
+  public async stopScan()
   {
     var scanStopedStatus = await this.ble.stopScan();
+    this.gettingDevices = false;
     this.presentAlert(scanStopedStatus.status);
   }
-
   
   public addUniqueDevicesToList(scanStatus: ScanStatus)
   {
@@ -96,13 +97,17 @@ export class BlConnectPage {
 
   public connectDevice(deviceAddress: string)
   {
+    this.gettingDevices = true;
     let params: ConnectionParams = {address: deviceAddress};
     this.ble.connect(params).subscribe((deviceInfo) => {
+      this.gettingDevices = false;
       this.presentAlert(`Success! DeviceInfo.status = ${deviceInfo.status} !`);
       console.log(deviceInfo);
       this.discover(deviceAddress);
+      
     },
     (error) => {
+      this.gettingDevices = false;
       this.presentAlert('connection fail!');
       this.presentAlert(error.message);
         }
@@ -114,12 +119,14 @@ export class BlConnectPage {
 
   public async discover(address: string)
   {
+    this.gettingDevices = true;
     let params = {
       address: address,
       clearCache: true
     }
 
     var device = await this.ble.discover(params);
+    this.gettingDevices = false;
 
       if (device)
       {
