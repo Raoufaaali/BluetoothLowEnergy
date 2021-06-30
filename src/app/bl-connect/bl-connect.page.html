@@ -19,9 +19,12 @@
           availlable Devices
       </ion-list-header>
       <ion-item *ngFor='let device of unpairedDevices'>
-          <span (click)="selectDevice(device.id)">
+          <span (click)="connectDevice(device.address)">
               {{device.name || device.address}}
           </span>
+          <div>  <ion-button color="dark"
+            (click)="startScanning()">connect</ion-button>
+        </div>
       </ion-item>
       <ion-spinner name="bubbles"
                    *ngIf="gettingDevices"></ion-spinner>
