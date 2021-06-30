@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'connect',
     loadChildren: () => import('./bl-connect/bl-connect.module').then( m => m.BlConnectPageModule)
   },
+  {
+    path: 'device-detail/:address',
+    loadChildren: () => import('./device-detail/device-detail.module').then( m => m.DeviceDetailPageModule)
+  },
 ];
 
 @NgModule({
