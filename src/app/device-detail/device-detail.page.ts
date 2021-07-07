@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Device } from '@ionic-native/bluetooth-le/ngx';
 import { BluetoothService } from '../services/bluetooth/bluetooth.service';
@@ -23,7 +23,8 @@ export class DeviceDetailPage {
   };
   constructor(
     private blService: BluetoothService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
     ) { }
 
 
@@ -36,15 +37,14 @@ export class DeviceDetailPage {
       let isConnected = await this.blService.isConnected(address);
       if (isConnected)
       {
-        console.log('device is connected');
-        this.discover(address);
+        console.log('device is connected, Going to discover');
+        await this.discover(address);
       }
       else 
       {
-        this.connectDevice(address);
         console.log('device is not connected. Attempting to connect....');
+        this.connectDevice(address);
       }
-      
     }   
       
   }
@@ -55,6 +55,7 @@ export class DeviceDetailPage {
     this.vm.deviceInfo = JSON.stringify(this.vm.device);
     console.log(JSON.stringify(this.vm.device));
     console.log(this.vm.deviceInfo);
+    this.cdr.detectChanges();
   }
 
   public connectDevice(address: string)
@@ -75,8 +76,6 @@ export class DeviceDetailPage {
 
   public sendPing(address: string) {
     this.blService.sendPing(address);
-
-
   }
 
 }
