@@ -9,6 +9,7 @@
     <img src="./assets/aristocratlogo.png" />
     <ion-card-header>
       <ion-card-subtitle>{{vm.device.status}}</ion-card-subtitle>
+      <ion-button *ngIf="vm.device" (click)="sendPing(vm.device.address)" >Toggle Lock</ion-button>
       <ion-card-title>{{vm.device.name || vm.device.address}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>

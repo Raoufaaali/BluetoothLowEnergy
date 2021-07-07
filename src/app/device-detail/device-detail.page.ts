@@ -73,4 +73,10 @@ export class DeviceDetailPage {
 
   }
 
+  public sendPing(address: string) {
+    this.blService.sendPing(address);
+
+
+  }
+
 }

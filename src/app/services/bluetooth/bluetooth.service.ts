@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BluetoothLE, ConnectionParams, Device, DeviceInfo } from '@ionic-native/bluetooth-le/ngx';
+import { BluetoothLE, ConnectionParams, Device, DeviceInfo, OperationResult, WriteCharacteristicParams } from '@ionic-native/bluetooth-le/ngx';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -40,6 +40,13 @@ export class BluetoothService {
   {
     let params: ConnectionParams = {address: address};
     return this.ble.connect(params);
+  }
+
+  public sendPing(address: string): Promise<OperationResult>
+  {
+    let params: WriteCharacteristicParams = {address: address, value: 'V3JpdGUgSGVsbG8gV29ybGQ=', characteristic: '2A06', service: '1802', type: 'noResponse'  };
+
+    return this.ble.write(params);
   }
 
 }
