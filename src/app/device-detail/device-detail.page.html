@@ -6,15 +6,22 @@
 
 <ion-content>
   <ion-card>
-    <img src="./assets/aristocratlogo.png" />
+    <ion-item >
+      <img src="./assets/aristocratlogo.png" height="150 px" width="150 px" style="margin: 0 auto;" />
+    </ion-item>
+    
     <ion-card-header>
       <ion-card-subtitle>{{vm.device.status}}</ion-card-subtitle>
-      <ion-button *ngIf="vm.device" (click)="sendPing(vm.device.address)" >Toggle Lock</ion-button>
+
+      <ion-button *ngIf="vm.device.address" (click)="sendPing(vm.device.address)" fill="outline">
+        <ion-icon slot="start" name="lock-open-outline"></ion-icon>
+      </ion-button>
+      
+      <!-- <ion-button *ngIf="vm.device" (click)="sendPing(vm.device.address)" > Send Signal</ion-button> -->
+     
       <ion-card-title>{{vm.device.name || vm.device.address}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Device Info. <br><br>
-
       {{vm.deviceInfo}}
     </ion-card-content>
   </ion-card>
